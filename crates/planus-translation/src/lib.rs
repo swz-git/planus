@@ -21,7 +21,9 @@ use std::path::Path;
 
 pub use ast_convert::ConverterOptions;
 pub use error::ErrorKind;
-pub use intermediate_language::{translate_files, translate_files_with_options};
+pub use intermediate_language::{
+    translate_files, translate_files_from_memory_with_options, translate_files_with_options,
+};
 
 pub fn format_file(path: &impl AsRef<Path>, ignore_errors: bool) -> Option<String> {
     let mut ctx = ctx::Ctx::default();

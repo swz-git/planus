@@ -45,3 +45,23 @@ fn translate_files_with_context<P: AsRef<Path>>(
 
     translator.finish()
 }
+
+pub fn translate_files_from_memory_with_options<P: AsRef<Path>>(
+    input_files: &[(P, String)],
+    converter_options: ConverterOptions,
+) -> Declarations {
+    let mut ctx = Ctx::default();
+
+    let mut ast_map = ast_map::AstMap::new_with_options(converter_options);
+    for file in input_files {
+        let file_id = ctx.add_file_from_memory(&file.0, file.1.clone());
+        ast_map.add_files_recursively(&mut ctx, file_id);
+    }
+
+    let mut translator = translation::Translator::new(&mut ctx, ast_map.reachability());
+    for schema in ast_map.iter() {
+        translator.add_schema(schema);
+    }
+
+    translator.finish()
+}

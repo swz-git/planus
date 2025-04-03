@@ -145,6 +145,19 @@ impl Ctx {
         );
     }
 
+    pub fn add_file_from_memory<P: AsRef<Path>>(&mut self, path: P, content: String) -> FileId {
+        let normalized_path = crate::util::normalize_path(path.as_ref());
+        match self.file_map.entry(normalized_path) {
+            indexmap::map::Entry::Occupied(entry) => *entry.into_mut(),
+            indexmap::map::Entry::Vacant(entry) => {
+                let path = entry.key().clone();
+                let file_id = self.files.add(path, content);
+                entry.insert(file_id);
+                file_id
+            }
+        }
+    }
+
     pub fn add_file<P: AsRef<Path>>(
         &mut self,
         path: P,
