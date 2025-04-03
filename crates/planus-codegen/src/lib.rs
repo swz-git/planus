@@ -35,7 +35,7 @@ pub fn generate_rust(declarations: &Declarations) -> eyre::Result<String> {
         declarations,
     );
     let res = templates::rust::Namespace(&output).render().unwrap();
-    let res = rust::format_string(&res, Some(1_000_000))?;
+    // let res = rust::format_string(&res, Some(1_000_000))?;
     let res = rust::format_string(&res, None)?;
     Ok(res)
 }
